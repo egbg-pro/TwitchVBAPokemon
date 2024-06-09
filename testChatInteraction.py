@@ -38,9 +38,10 @@ def getWindowHwnd(window_name):
     tw, expt = {}, True
     win32gui.EnumWindows(window_dict_handler, tw)
     for handle in tw:
-        if tw[handle] == window_name:
+        if window_name in tw[handle]: # using a like search since the fps is variable
             # print(tw[handle] + ": " + str(handle)) # This prints a handler, but we want the child window (for VBA specifically)
-            return win32gui.ChildWindowFromPoint(handle, tuple([1, 1])) # As VBA has one child window, we will interact with this one (tweak this line for other programs)
+            return handle # for mGBA
+            # return win32gui.ChildWindowFromPoint(handle, tuple([1, 1])) # For VBA
     if expt:
         raise WindowNotFoundError(f"'{window_name}' does not appear to be a window.")
 
@@ -55,34 +56,34 @@ def makeCommand(hwndEdit, key):
 def interpretCommand(hwndEdit, comm):
     comm = comm.lower()
     if comm == 'v' or comm == 'down':
-        makeCommand(hwndEdit, 0x53)
+        makeCommand(hwndEdit, 0x28)
     elif comm == '^' or comm == 'up':
-        makeCommand(hwndEdit, 0x57)
+        makeCommand(hwndEdit, 0x26)
     elif comm == '<' or comm == 'left':
-        makeCommand(hwndEdit, 0x41)
+        makeCommand(hwndEdit, 0x25)
     elif comm == '>' or comm == 'right':
-        makeCommand(hwndEdit, 0x44)
+        makeCommand(hwndEdit, 0x27)
     elif comm == 'start':
         makeCommand(hwndEdit, 0x0d)
     elif comm == 'select':
         makeCommand(hwndEdit, 0x08)
-    elif comm == 'screenshot':
-        makeCommand(hwndEdit, 0x54)
+    # elif comm == 'screenshot':
+    #     makeCommand(hwndEdit, 0x54)
     elif comm == 'a':
-        makeCommand(hwndEdit, 0x5A)
+        makeCommand(hwndEdit, 0x58) # x
     elif comm == 'b':
-        makeCommand(hwndEdit, 0x58)
+        makeCommand(hwndEdit, 0x5A) # z
     elif comm == 'l':
-        makeCommand(hwndEdit, 0x4C)
+        makeCommand(hwndEdit, 0x41)
     elif comm == 'r':
-        makeCommand(hwndEdit, 0x52)
+        makeCommand(hwndEdit, 0x53)
 
 # Use https://twitchapps.com/tmi/ to get your token for chat (oath pword)
 conn_obj = {
     'server': 'irc.chat.twitch.tv',
     'port': 6667,
     'nickname': '', # Nickname is your username
-    'token': 'oauth:7486u1aelnwng9x9a0l3l0ccas1r6b',
+    'token': '',
     'channel': '#' # channel is the chat room you'll connect to, e.g. #ninja
 }
 
@@ -96,7 +97,8 @@ sock.send(f"NICK { conn_obj['nickname'] }\n".encode('utf-8'))
 sock.send(f"JOIN { conn_obj['channel'] }\n".encode('utf-8'))
 
 # Setup VBA inputs
-windowToFind = "emerald - VisualBoyAdvance-M 2.0.1" # Put the vba window name here
+# windowToFind = "emerald - VisualBoyAdvance-M 2.0.1" # example window name for vba
+windowToFind = "mGBA - Pokemon - Emerald Version" # example mGBA window name
 hwnd = getWindowHwnd(windowToFind) 
 hwndEdit = win32gui.GetWindow(hwnd, win32con.GW_CHILD) # grabs the vba window
 
