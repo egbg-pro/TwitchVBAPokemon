@@ -53,30 +53,47 @@ def makeCommand(hwndEdit, key):
     sleep(0.1)
 
 # Key commands found here: https://learn.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+# comm is the full chat message
 def interpretCommand(hwndEdit, comm):
     comm = comm.lower()
-    if comm == 'v' or comm == 'down':
-        makeCommand(hwndEdit, 0x28)
-    elif comm == '^' or comm == 'up':
-        makeCommand(hwndEdit, 0x26)
-    elif comm == '<' or comm == 'left':
-        makeCommand(hwndEdit, 0x25)
-    elif comm == '>' or comm == 'right':
-        makeCommand(hwndEdit, 0x27)
-    elif comm == 'start':
-        makeCommand(hwndEdit, 0x0d)
-    elif comm == 'select':
-        makeCommand(hwndEdit, 0x08)
-    # elif comm == 'screenshot':
-    #     makeCommand(hwndEdit, 0x54)
-    elif comm == 'a':
-        makeCommand(hwndEdit, 0x58) # x
-    elif comm == 'b':
-        makeCommand(hwndEdit, 0x5A) # z
-    elif comm == 'l':
-        makeCommand(hwndEdit, 0x41)
-    elif comm == 'r':
-        makeCommand(hwndEdit, 0x53)
+    counter = 0
+    for c in comm:
+        if c == 'v' or c == 'o' or c == 'd':
+            makeCommand(hwndEdit, 0x28) # down key
+            counter += 1
+        elif c == '^' or c == 'n' or c == 'u' or c == 'c':
+            makeCommand(hwndEdit, 0x26) # up key
+            counter += 1
+        elif c == '<' or c == 's' or c == 'l' or c == 'g':
+            makeCommand(hwndEdit, 0x25) # left key
+            counter += 1
+        elif c == '>' or c == 't' or c == 'm' or c == 'p':
+            makeCommand(hwndEdit, 0x27) # right key
+            counter += 1
+        elif c == 'f' or c == 'w' or c == 'y' or c == 'r':
+            makeCommand(hwndEdit, 0x0d) # start
+            counter += 1
+        elif c == 'q' or c == 'j':
+            makeCommand(hwndEdit, 0x08) # select
+            counter += 1
+        
+        # elif comm == 'screenshot':
+        #     makeCommand(hwndEdit, 0x54)
+        
+        elif c == 'e' or c == 'a' or c == 'h':
+            makeCommand(hwndEdit, 0x58) # x
+            counter += 1
+        elif c == 'b' or c == 'i' or c == 'k':
+            makeCommand(hwndEdit, 0x5A) # z
+            counter += 1
+        elif c == 'x':
+            makeCommand(hwndEdit, 0x41) # a
+            counter += 1
+        elif c == 'z':
+            makeCommand(hwndEdit, 0x53) # s
+            counter += 1
+        if counter == 10:
+            break
 
 # Use https://twitchapps.com/tmi/ to get your token for chat (oath pword)
 conn_obj = {
